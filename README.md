@@ -1,0 +1,5 @@
+# JCScraper
+
+```
+npm run scrape
+```
