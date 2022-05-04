@@ -2,11 +2,12 @@
   "name": "jcscraper",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src --fix",
     "test": "jest",
-    "scrape": "ts-node src/index.ts"
+    "scrape": "ts-node src/getQuotes.ts",
+    "build": "del-cli dist && tsc"
   },
   "keywords": [],
   "author": "Mauricio Robayo",
@@ -21,6 +22,7 @@
     "@types/node": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "del-cli": "^4.0.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.5.1",

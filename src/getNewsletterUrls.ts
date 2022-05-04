@@ -38,7 +38,7 @@ export async function getNewsletterUrls(): Promise<string[]> {
       }
     });
 
-    console.log(`Found ${allNewsletterUrls.length} newsletters urls.`);
+    console.log(`=Collected ${allNewsletterUrls.length} newsletters urls.\n`);
 
     await fs.writeFile(
       path.join(cacheDir, newsletterUrlsFilename),

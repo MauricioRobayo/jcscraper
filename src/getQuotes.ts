@@ -1,9 +1,10 @@
-import { scrapeQuote, removeEnclosingQuotationMarks, cacheDir } from "./utils";
+import { cacheDir } from "./utils";
 
 import fs from "fs/promises";
 import path from "path";
 import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
-import { filter } from "cheerio/lib/api/traversing";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 export interface Quote {
   text: string;
@@ -68,12 +69,46 @@ export async function getQuotes(): Promise<Quote[]> {
       await new Promise((resolve) => setTimeout(resolve, wait * 1000));
     }
 
+    console.log(`=Collected ${allQuotes.length} quotes.\n`);
+
     await fs.writeFile(
       path.join(cacheDir, quotesFilename),
       JSON.stringify(allQuotes)
     );
 
     return allQuotes;
+  }
+}
+
+export async function scrapeQuote(
+  clickToTweetRef: ClickToTweetRef
+): Promise<Quote | { error: true }> {
+  try {
+    const url = `https://clicktotweet.com/${clickToTweetRef.id}`;
+
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    const text = $("title")
+      .text()
+      .replace(/[-–]\s*@JamesClear/g, "")
+      .trim();
+
+    if (!/\w/.test(text)) {
+      throw new Error(
+        `getQuoteTest: not a quote on cttId '${clickToTweetRef.id}' with text '${text}'`
+      );
+    }
+
+    return {
+      source: clickToTweetRef.source,
+      clickToTweetId: clickToTweetRef.id,
+      text,
+    };
+  } catch (e) {
+    console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
+    return {
+      error: true,
+    };
   }
 }
 

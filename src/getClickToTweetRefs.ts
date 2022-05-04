@@ -1,7 +1,9 @@
 import path from "path";
 import fs from "fs/promises";
 import { getNewsletterUrls } from "./getNewsletterUrls";
-import { cacheDir, scrapeClickToTweetRefs } from "./utils";
+import { cacheDir } from "./utils";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 export interface ClickToTweetRef {
   id: string;
@@ -63,6 +65,8 @@ export async function getClickToTweetRefs(): Promise<ClickToTweetRef[]> {
       allClickToTweetRefs.push(...clickToTweetRefs.flat());
     }
 
+    console.log(`=Collected ${allClickToTweetRefs.length} clickToTweetRefs.\n`);
+
     await fs.writeFile(
       path.join(cacheDir, clickToTweetRefsFilename),
       JSON.stringify(allClickToTweetRefs)
@@ -70,6 +74,28 @@ export async function getClickToTweetRefs(): Promise<ClickToTweetRef[]> {
 
     return allClickToTweetRefs;
   }
+}
+
+export async function scrapeClickToTweetRefs(
+  newsletterUrl: string
+): Promise<ClickToTweetRef[]> {
+  const { data } = await axios.get(newsletterUrl);
+  const $ = cheerio.load(data);
+  const links = $('a[href^="https://ctt.ac/"]');
+  const clickToTweetRefs = new Map<string, ClickToTweetRef>();
+
+  $(links).each(function (_, link) {
+    const href = $(link).attr("href");
+    if (href) {
+      const id = href.replace(/.*\//, "");
+      clickToTweetRefs.set(href, {
+        id,
+        source: newsletterUrl,
+      });
+    }
+  });
+
+  return [...clickToTweetRefs.values()];
 }
 
 if (require.main === module) {

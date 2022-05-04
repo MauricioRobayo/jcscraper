@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     "importHelpers": true,
     "removeComments": true,
     "target": "es2020",
@@ -9,6 +10,11 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules", "coverage", "dist", "**/*.test.ts"],
+  "include": ["src/**/*"]
 }
