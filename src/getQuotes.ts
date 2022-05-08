@@ -1,4 +1,4 @@
-import { cacheDir } from "./utils";
+import { cacheDir, removeEnclosingQuotationMarks } from "./utils";
 
 import fs from "fs/promises";
 import path from "path";
@@ -90,7 +90,7 @@ export async function scrapeQuote(
     const $ = cheerio.load(data);
     const text = $("title")
       .text()
-      .replace(/[-–]\s*@JamesClear/g, "")
+      .replace(/[-–].*@?JamesClear/g, "")
       .trim();
 
     if (!/\w/.test(text)) {
@@ -102,7 +102,7 @@ export async function scrapeQuote(
     return {
       source: clickToTweetRef.source,
       clickToTweetId: clickToTweetRef.id,
-      text,
+      text: removeEnclosingQuotationMarks(text),
     };
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
