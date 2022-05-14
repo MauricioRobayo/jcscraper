@@ -63,12 +63,6 @@ export async function getQuotes(): Promise<Quote[]> {
         chunk.map((chunkRef) => scrapeQuote(chunkRef))
       );
       allQuotes.push(...quotes.flat().filter(isQuote));
-
-      chunk = [];
-
-      const wait = Math.ceil(Math.random() * 5);
-      console.log(`Politely waiting ${wait}s...`);
-      await new Promise((resolve) => setTimeout(resolve, wait * 1000));
     }
 
     console.log(`=Collected ${allQuotes.length} quotes.\n`);
