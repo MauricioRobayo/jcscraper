@@ -1,8 +1,4 @@
-import {
-  removeEnclosingQuotationMarks,
-  removeSignature,
-  normalizeNewLines,
-} from "./utils";
+import { QuoteCleaner } from "./QuoteCleaner";
 
 describe("removeEnclosingQuotes", () => {
   const cases = [
@@ -18,7 +14,8 @@ describe("removeEnclosingQuotes", () => {
   it.each(cases)(
     "should remove enclosing quotation marks from %p",
     (text, expected) => {
-      expect(removeEnclosingQuotationMarks(text)).toBe(expected);
+      const quoteCleaner = new QuoteCleaner(text);
+      expect(quoteCleaner.removeEnclosingQuotationMarks().text).toBe(expected);
     }
   );
 });
@@ -39,7 +36,8 @@ describe("removeSignature", () => {
     `${mockText}\n\nJamesClear`,
   ];
   it.each(cases)("should remove signature from %p", (text) => {
-    expect(removeSignature(text)).toBe(mockText);
+    const quoteCleaner = new QuoteCleaner(text);
+    expect(quoteCleaner.removeSignature().text).toBe(mockText);
   });
 });
 
@@ -57,6 +55,7 @@ describe("normalizeNewLines", () => {
     "Hello,\nworld!",
   ];
   it.each(cases)("should normalize new lines from %p", (text) => {
-    expect(normalizeNewLines(text)).toBe(expected);
+    const quoteCleaner = new QuoteCleaner(text);
+    expect(quoteCleaner.normalizeNewLines().text).toBe(expected);
   });
 });

@@ -2,7 +2,7 @@ import axios from "axios";
 import fs from "fs/promises";
 import * as cheerio from "cheerio";
 import path from "path";
-import { cacheDir } from "./utils";
+import { cacheDir } from "./config";
 
 export async function getNewsletterUrls(): Promise<string[]> {
   const newsletterUrlsFilename = "newsletterUrls.json";

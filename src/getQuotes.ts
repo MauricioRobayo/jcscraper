@@ -1,8 +1,5 @@
-import {
-  cacheDir,
-  removeEnclosingQuotationMarks,
-  removeSignature,
-} from "./utils";
+import { cacheDir } from "./config";
+import { QuoteCleaner } from "./QuoteCleaner";
 
 import fs from "fs/promises";
 import path from "path";
@@ -12,7 +9,7 @@ import * as cheerio from "cheerio";
 
 export interface Quote {
   rawText: string;
-  quote: string;
+  text: string;
   clickToTweetId: string;
   source: string;
 }
@@ -101,13 +98,13 @@ export async function scrapeQuote(
       );
     }
 
-    const quote = removeSignature(removeEnclosingQuotationMarks(rawText));
+    const quoteCleaner = new QuoteCleaner(rawText);
 
     return {
       source: clickToTweetRef.source,
       clickToTweetId: clickToTweetRef.id,
-      rawText,
-      quote,
+      rawText: rawText,
+      text: quoteCleaner.clean().text,
     };
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);

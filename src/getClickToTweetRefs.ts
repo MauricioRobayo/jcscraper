@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs/promises";
 import { getNewsletterUrls } from "./getNewsletterUrls";
-import { cacheDir } from "./utils";
+import { cacheDir } from "./config";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
