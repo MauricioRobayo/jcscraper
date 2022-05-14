@@ -30,11 +30,15 @@ export class QuoteCleaner {
     return this;
   }
 
+  extractQuote(): QuoteCleaner {
+    // Order matters!
+    this.rawText = this.removeSignature().removeEnclosingQuotationMarks().text;
+
+    return this;
+  }
+
   clean(): QuoteCleaner {
-    this.removeEnclosingQuotationMarks()
-      .removeSignature()
-      .normalizeNewLines()
-      .text.trim();
+    this.extractQuote().normalizeNewLines().text.trim();
 
     return this;
   }
