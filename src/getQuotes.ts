@@ -1,4 +1,8 @@
-import { cacheDir, removeEnclosingQuotationMarks } from "./utils";
+import {
+  cacheDir,
+  removeEnclosingQuotationMarks,
+  removeSignature,
+} from "./utils";
 
 import fs from "fs/promises";
 import path from "path";
@@ -7,7 +11,8 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 
 export interface Quote {
-  text: string;
+  rawText: string;
+  quote: string;
   clickToTweetId: string;
   source: string;
 }
@@ -88,21 +93,21 @@ export async function scrapeQuote(
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
-    const text = $("title")
-      .text()
-      .replace(/[-–].*@?JamesClear/g, "")
-      .trim();
+    const rawText = $("title").text();
 
-    if (!/\w/.test(text)) {
+    if (!/\w/.test(rawText)) {
       throw new Error(
-        `getQuoteTest: not a quote on cttId '${clickToTweetRef.id}' with text '${text}'`
+        `getQuoteTest: not a quote on cttId '${clickToTweetRef.id}' with text '${rawText}'`
       );
     }
+
+    const quote = removeSignature(removeEnclosingQuotationMarks(rawText));
 
     return {
       source: clickToTweetRef.source,
       clickToTweetId: clickToTweetRef.id,
-      text: removeEnclosingQuotationMarks(text),
+      rawText,
+      quote,
     };
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
