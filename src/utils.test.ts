@@ -1,4 +1,8 @@
-import { removeEnclosingQuotationMarks, removeSignature } from "./utils";
+import {
+  removeEnclosingQuotationMarks,
+  removeSignature,
+  normalizeNewLines,
+} from "./utils";
 
 describe("removeEnclosingQuotes", () => {
   const cases = [
@@ -36,5 +40,23 @@ describe("removeSignature", () => {
   ];
   it.each(cases)("should remove signature from %p", (text) => {
     expect(removeSignature(text)).toBe(mockText);
+  });
+});
+
+describe("normalizeNewLines", () => {
+  const expected = "Hello,\nworld!";
+  const cases = [
+    "Hello, \n\n world!",
+    "Hello, \n\nworld!",
+    "Hello,\n\n world!",
+    "Hello,\n\nworld!",
+    "Hello,\n\n\nworld!",
+    "Hello, \n world!",
+    "Hello, \nworld!",
+    "Hello,\n world!",
+    "Hello,\nworld!",
+  ];
+  it.each(cases)("should normalize new lines from %p", (text) => {
+    expect(normalizeNewLines(text)).toBe(expected);
   });
 });

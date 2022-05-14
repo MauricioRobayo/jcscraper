@@ -22,3 +22,7 @@ export function removeSignature(text: string): string {
     .replace(/@?JamesClear$/, "")
     .trimEnd();
 }
+
+export function normalizeNewLines(text: string): string {
+  return text.replace(/\s*\n+\s*/g, "\n");
+}
