@@ -4,3 +4,4 @@ export {
   scrapeClickToTweetRefs,
 } from "./getClickToTweetRefs";
 export { getQuotes, scrapeQuote } from "./getQuotes";
+export { newsletterBaseUrl } from "./config";

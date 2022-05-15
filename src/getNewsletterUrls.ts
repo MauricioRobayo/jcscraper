@@ -2,7 +2,7 @@ import axios from "axios";
 import fs from "fs/promises";
 import * as cheerio from "cheerio";
 import path from "path";
-import { cacheDir } from "./config";
+import { cacheDir, newsletterBaseUrl } from "./config";
 
 export async function getNewsletterUrls(): Promise<string[]> {
   const newsletterUrlsFilename = "newsletterUrls.json";
@@ -23,10 +23,9 @@ export async function getNewsletterUrls(): Promise<string[]> {
 
     return newslettersUrls;
   } catch (e) {
-    const url = "https://jamesclear.com/3-2-1";
-    console.log(`Scraping newsletters urls from ${url}...`);
+    console.log(`Scraping newsletters urls from ${newsletterBaseUrl}...`);
 
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(newsletterBaseUrl);
     const $ = cheerio.load(data);
     const links = $("a.all-articles__news__post");
 
