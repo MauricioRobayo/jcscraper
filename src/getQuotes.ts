@@ -1,11 +1,14 @@
-import axios from "axios";
-import * as cheerio from "cheerio";
+import { cacheDir } from "./config";
+import { QuoteCleaner } from "./QuoteCleaner";
+
 import fs from "fs/promises";
 import path from "path";
-import { cacheDir } from "./config";
 import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 export interface Quote {
+  rawText: string;
   text: string;
   clickToTweetId: string;
   source: string;
@@ -81,18 +84,21 @@ export async function scrapeQuote(
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
-    const text = $("title").text();
+    const rawText = $("title").text();
 
-    if (!/\w/.test(text)) {
+    if (!/\w/.test(rawText)) {
       throw new Error(
-        `getQuoteTest: not a quote on clickToTweetId '${clickToTweetRef.id}' with text '${text}'`
+        `getQuoteTest: not a quote on cttId '${clickToTweetRef.id}' with text '${rawText}'`
       );
     }
+
+    const quoteCleaner = new QuoteCleaner(rawText);
 
     return {
       source: clickToTweetRef.source,
       clickToTweetId: clickToTweetRef.id,
-      text,
+      rawText: rawText,
+      text: quoteCleaner.clean().text,
     };
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
