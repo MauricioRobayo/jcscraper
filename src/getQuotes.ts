@@ -86,11 +86,19 @@ export async function scrapeQuote(
     const $ = cheerio.load(data);
     const rawText = $("title").text();
 
+    if (!/\w/.test(rawText)) {
+      throw new Error(
+        `getQuoteTest: not a quote on cttId '${clickToTweetRef.id}' with text '${rawText}'`
+      );
+    }
+
+    const quoteCleaner = new QuoteCleaner(rawText);
+
     return {
       source: clickToTweetRef.source,
       clickToTweetId: clickToTweetRef.id,
       rawText: rawText,
-      text: new QuoteCleaner(rawText).clean().text,
+      text: quoteCleaner.clean().text,
     };
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
