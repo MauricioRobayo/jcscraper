@@ -5,4 +5,4 @@ export {
 } from "./getClickToTweetRefs";
 export { getQuotes, scrapeQuote } from "./getQuotes";
 export { newsletterBaseUrl } from "./config";
-export type { Quote as QuoteTye } from "./getQuotes";
+export type { Quote as QuoteType } from "./getQuotes";
