@@ -1,11 +1,10 @@
-import { cacheDir } from "./config";
-import { QuoteCleaner } from "./QuoteCleaner";
-
-import fs from "fs/promises";
-import path from "path";
-import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
 import axios from "axios";
 import * as cheerio from "cheerio";
+import fs from "fs/promises";
+import path from "path";
+import { cacheDir } from "./config";
+import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
+import { QuoteCleaner } from "./QuoteCleaner";
 
 export interface Quote {
   rawText: string;
