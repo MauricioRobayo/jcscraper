@@ -1,14 +1,15 @@
 {
   "name": "jcscraper",
   "version": "0.0.13",
-  "description": "Scrape utilities for James Clear.com 3-2-1 newsletter",
+  "description": "Scrape utilities for James Clear 3-2-1 newsletter",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src --fix",
     "test": "jest",
     "scrape": "ts-node src/getQuotes.ts",
     "build": "del-cli dist && tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "watch": "tsc-watch --onSuccess \"yalc push\""
   },
   "keywords": [],
   "author": "Mauricio Robayo",
@@ -29,8 +30,10 @@
     "prettier": "^2.4.1",
     "ts-jest": "^28.0.1",
     "ts-node": "^10.7.0",
+    "tsc-watch": "^5.0.3",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "yalc": "^1.0.0-pre.53"
   },
   "files": [
     "dist"

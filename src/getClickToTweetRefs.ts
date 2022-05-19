@@ -95,7 +95,7 @@ export async function scrapeClickToTweetRefs(
     }
   });
 
-  return [...clickToTweetRefs.values()];
+  return Array.from(clickToTweetRefs.values());
 }
 
 if (require.main === module) {

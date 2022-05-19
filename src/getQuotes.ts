@@ -77,7 +77,7 @@ export async function getQuotes(): Promise<Quote[]> {
 
 export async function scrapeQuote(
   clickToTweetRef: ClickToTweetRef
-): Promise<Quote | { error: true }> {
+): Promise<Quote | { error: unknown }> {
   try {
     const url = `https://clicktotweet.com/${clickToTweetRef.id}`;
 
@@ -102,12 +102,12 @@ export async function scrapeQuote(
   } catch (e) {
     console.log(`Failed on ${JSON.stringify(clickToTweetRef, null, 2)}`);
     return {
-      error: true,
+      error: e,
     };
   }
 }
 
-function isQuote(quote: Quote | { error: true }): quote is Quote {
+function isQuote(quote: Quote | { error: unknown }): quote is Quote {
   return !("error" in quote);
 }
 
