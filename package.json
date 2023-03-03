@@ -1,6 +1,6 @@
 {
   "name": "jcscraper",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Scrape utilities for James Clear 3-2-1 newsletter",
   "main": "dist/index.js",
   "scripts": {
