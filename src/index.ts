@@ -3,6 +3,7 @@ export {
   getClickToTweetRefs,
   scrapeClickToTweetRefs,
 } from "./getClickToTweetRefs";
-export { getQuotes, scrapeQuote, quoteSchema, quotesSchema } from "./getQuotes";
+export { getQuotes, scrapeQuote } from "./getQuotes";
 export { newsletterBaseUrl } from "./config";
-export type { Quote, Quotes } from "./getQuotes";
+export type { Quote, Quotes } from "./schema";
+export { quoteSchema, quotesSchema } from "./schema";

@@ -2,20 +2,10 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs/promises";
 import path from "path";
-import { z } from "zod";
+import { Quotes, quotesSchema, Quote } from "./schema";
 import { cacheDir } from "./config";
 import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
 import { QuoteCleaner } from "./QuoteCleaner";
-
-export const quoteSchema = z.object({
-  rawText: z.string(),
-  text: z.string(),
-  clickToTweetId: z.string(),
-  source: z.string(),
-});
-export const quotesSchema = z.array(quoteSchema);
-export type Quote = z.infer<typeof quoteSchema>;
-export type Quotes = z.infer<typeof quotesSchema>;
 
 export async function getQuotes(): Promise<Quotes> {
   const quotesFilename = "quotes.json";
