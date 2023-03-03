@@ -2,18 +2,22 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs/promises";
 import path from "path";
+import { z } from "zod";
 import { cacheDir } from "./config";
 import { ClickToTweetRef, getClickToTweetRefs } from "./getClickToTweetRefs";
 import { QuoteCleaner } from "./QuoteCleaner";
 
-export interface Quote {
-  rawText: string;
-  text: string;
-  clickToTweetId: string;
-  source: string;
-}
+export const quoteSchema = z.object({
+  rawText: z.string(),
+  text: z.string(),
+  clickToTweetId: z.string(),
+  source: z.string(),
+});
+export const quotesSchema = z.array(quoteSchema);
+export type Quote = z.infer<typeof quoteSchema>;
+export type Quotes = z.infer<typeof quotesSchema>;
 
-export async function getQuotes(): Promise<Quote[]> {
+export async function getQuotes(): Promise<Quotes> {
   const quotesFilename = "quotes.json";
 
   await fs.mkdir(cacheDir, { recursive: true });
@@ -30,7 +34,7 @@ export async function getQuotes(): Promise<Quote[]> {
       `Found file with previous scraped data. Returning ${quotes.length} cached quotes.`
     );
 
-    return quotes;
+    return quotesSchema.parse(quotes);
   } catch (e) {
     const allQuotes: Quote[] = [];
 
