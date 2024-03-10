@@ -1,7 +1,7 @@
 export class QuoteCleaner {
   constructor(private rawText: string) {}
 
-  removeEnclosingQuotationMarks(): QuoteCleaner {
+  removeEnclosingQuotationMarks(): this {
     if (this.rawText.startsWith('"') && this.rawText.endsWith('"')) {
       this.rawText = this.rawText.slice(1, -1);
     }
@@ -14,7 +14,7 @@ export class QuoteCleaner {
     return this;
   }
 
-  removeSignature(): QuoteCleaner {
+  removeSignature(): this {
     this.rawText = this.rawText
       .trimEnd()
       .replace(/[-–].*@?JamesClear$/, "")
@@ -24,20 +24,20 @@ export class QuoteCleaner {
     return this;
   }
 
-  normalizeNewLines(): QuoteCleaner {
+  normalizeNewLines(): this {
     this.rawText = this.rawText.replace(/\s*\n+\s*/g, "\n");
 
     return this;
   }
 
-  extractQuote(): QuoteCleaner {
+  extractQuote(): this {
     // Order matters!
     this.rawText = this.removeSignature().removeEnclosingQuotationMarks().text;
 
     return this;
   }
 
-  clean(): QuoteCleaner {
+  clean(): this {
     this.extractQuote().normalizeNewLines().text.trim();
 
     return this;
